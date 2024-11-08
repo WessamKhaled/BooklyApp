@@ -1,9 +1,34 @@
 import 'package:bookly_app/core/utils/assets.dart';
 import 'package:flutter/material.dart';
 
-class SplashViewBody extends StatelessWidget {
+import 'sliging_text.dart';
+
+class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});
 
+  @override
+  State<SplashViewBody> createState() => _SplashViewBodyState();
+}
+
+class _SplashViewBodyState extends State<SplashViewBody> with SingleTickerProviderStateMixin{
+
+  late AnimationController animationController;
+  late Animation<Offset> slideAnimation;
+  @override
+  void initState() {
+   
+    super.initState();
+    animationController = AnimationController(vsync: this , duration: const Duration(seconds: 2));
+
+    slideAnimation = Tween<Offset>(begin: Offset(0, 3) ,end: Offset.zero).animate(animationController);
+
+    animationController.forward();
+
+    void dispose(){
+      super.dispose();
+      animationController.dispose();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return  Column(
@@ -12,13 +37,10 @@ class SplashViewBody extends StatelessWidget {
 
       children: [
         Image.asset(AssetsData.logo),
-        const SizedBox(
+         const SizedBox(
           height: 5,
         ),
-        const Text(
-          "Read Free Books",
-          textAlign: TextAlign.center,
-        ),
+        SlidingText(slideAnimation: slideAnimation),
       ],
     );
   }
