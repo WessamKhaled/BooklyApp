@@ -1,5 +1,9 @@
+import 'package:bookly_app/Features/home/presentation/views/home_view.dart';
+import 'package:bookly_app/constants.dart';
 import 'package:bookly_app/core/utils/assets.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import 'sliging_text.dart';
 
@@ -18,17 +22,18 @@ class _SplashViewBodyState extends State<SplashViewBody> with SingleTickerProvid
   void initState() {
    
     super.initState();
-    animationController = AnimationController(vsync: this , duration: const Duration(seconds: 2));
+    initSlidingAnimation();
 
-    slideAnimation = Tween<Offset>(begin: Offset(0, 3) ,end: Offset.zero).animate(animationController);
-
-    animationController.forward();
-
-    void dispose(){
-      super.dispose();
-      animationController.dispose();
-    }
+    navigateToHome();
   }
+
+
+  @override
+  void dispose(){
+    super.dispose();
+    animationController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return  Column(
@@ -43,5 +48,26 @@ class _SplashViewBodyState extends State<SplashViewBody> with SingleTickerProvid
         SlidingText(slideAnimation: slideAnimation),
       ],
     );
+  }
+
+  void initSlidingAnimation() {
+    animationController = AnimationController(
+        vsync: this , duration: const Duration(
+        seconds: 2
+    )
+    );
+
+    slideAnimation = Tween<Offset>(
+        begin: Offset(0, 3) ,
+        end: Offset.zero).animate(animationController);
+
+    animationController.forward();
+
+  }
+
+  void navigateToHome() {
+    Future.delayed(const Duration(seconds: 2),() {
+      Get.to(() => const HomeView(), transition: Transition.fade,duration: kTranstionDuration);
+    },);
   }
 }
